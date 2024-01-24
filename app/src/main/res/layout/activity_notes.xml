@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NotesActivity">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:minWidth="150dp"
+            android:paddingTop="@dimen/_10sdp"
+            android:textColor="#000"
+            android:textSize="@dimen/_12sdp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="3dp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
+
+            android:paddingBottom="3dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/etTitle"
+                android:hint="Enter Title Here"
+                android:textStyle="bold"
+                android:paddingStart="@dimen/_10sdp"
+                android:background="@drawable/blue_circularbutton"
+                android:paddingEnd="@dimen/_30sdp"
+                android:minWidth="150dp"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:textColor="#000"
+                android:textSize="@dimen/_12sdp" />
+
+
+        </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:minWidth="150dp"
+            android:paddingTop="@dimen/_10sdp"
+            android:textColor="#000"
+            android:textSize="@dimen/_12sdp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="3dp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
+
+            android:paddingBottom="3dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:hint="Enter Description Here"
+                android:textStyle="bold"
+                android:id="@+id/etDes"
+                android:paddingStart="@dimen/_10sdp"
+                android:background="@drawable/blue_circularbutton"
+                android:paddingEnd="@dimen/_30sdp"
+                android:minWidth="150dp"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:textColor="#000"
+                android:textSize="@dimen/_12sdp" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/saveBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_10sdp"
+
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+
+        android:textAllCaps="false"
+        android:background="@drawable/btn_3"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11sdp"
+        />
+</RelativeLayout>
