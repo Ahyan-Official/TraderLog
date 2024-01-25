@@ -7,15 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class TradeDatabaseHelper extends SQLiteOpenHelper {
 
     //Initialize all the fields needed for database
-    public static final String DATABASE_NAME = "Friends.db";
-    public static final String TABLE_NAME = "friends_data";
+    public static final String DATABASE_NAME = "Trade.db";
+    public static final String TABLE_NAME = "trade";
     public static final String COL_1 = "ID";
-    public static final String COL_2 = "First_Nmae";
-    public static final String COL_3 = "Last_Name";
+    public static final String COL_2 = "Total_Money";
+    public static final String COL_3 = "Total_Hours";
     public static final String COL_4 = "Date";
     public static final String COL_5 = "Date";
     public static final String LBR = "(";
@@ -23,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COM = ",";
 
     //Just pass context of the app to make it simpler
-    public DatabaseHelper(Context context) {
+    public TradeDatabaseHelper(Context context) {
         super( context, DATABASE_NAME, null, 2 );
 
     }
@@ -34,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Creating table
 
         db.execSQL( "create table " + TABLE_NAME + LBR + COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT" + COM +
-                COL_2 + " TEXT" + COM + COL_3 + " TEXT" + COM + COL_4 + " INTEGER" +RBR );
+                COL_2 + " REAL" + COM + COL_3 + " REAL" + COM + COL_4 + " INTEGER" +RBR );
 
         // Another way of writing the CREATE TABLE query
        /* db.execSQL( "create table student_data (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Surname TEXT," +

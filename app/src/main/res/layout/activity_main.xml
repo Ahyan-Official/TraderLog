@@ -64,6 +64,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:hint="Money Made"
+                        android:id="@+id/etMoneyMade"
                         android:textStyle="bold"
                         android:paddingStart="@dimen/_10sdp"
                         android:background="@drawable/blue_circularbutton"
@@ -101,6 +102,34 @@
                         android:layout_centerVertical="true"
                         android:hint="Hours"
                         android:textStyle="bold"
+                        android:id="@+id/etHoursWorked"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:background="@drawable/blue_circularbutton"
+                        android:paddingEnd="@dimen/_30sdp"
+                        android:minWidth="150dp"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:textColor="#000"
+                        android:textSize="@dimen/_12sdp" />
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:layout_marginHorizontal="@dimen/_3sdp"
+
+                    android:paddingBottom="3dp">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:hint="Minutes"
+                        android:textStyle="bold"
+                        android:id="@+id/etMinutesWorked"
                         android:paddingStart="@dimen/_10sdp"
                         android:background="@drawable/blue_circularbutton"
                         android:paddingEnd="@dimen/_30sdp"

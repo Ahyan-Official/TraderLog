@@ -3,14 +3,12 @@ package com.app.traderlogkeeper.az;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -32,11 +30,16 @@ public class NotesActivity extends AppCompatActivity {
         saveBtn = findViewById(R.id.saveBtn);
         etTitle = findViewById(R.id.etTitle);
         etDes = findViewById(R.id.etDes);
-
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        String date = df.format(new Date());
+        etTitle.setText(myDB.getNoteTitle(date));;
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
 
 
             }
@@ -59,13 +62,35 @@ public class NotesActivity extends AppCompatActivity {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 String date = df.format(new Date());
 
-                boolean isInserted = myDB.instertData( title, des, date);
 
-                if(isInserted == true){
-                    Toast.makeText( NotesActivity.this, "Data is inserted", Toast.LENGTH_SHORT ).show();
-                }
-                else
-                    Toast.makeText( NotesActivity.this, "Data is not inserted", Toast.LENGTH_SHORT ).show();
+                if(myDB.checkDate(date)){
+                    Toast.makeText(NotesActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                    //update
+                    boolean isUpdated = myDB.updateData( title, des, date );
+
+                    if (isUpdated == true){
+                        showMessage( "Update", "Your data has been successfully updated!" );
+                    }
+                    else{
+                        showMessage( "Update failed", "Cannot Update your data :(" );
+
+                    }
+                }else{
+                    //insert
+                    Toast.makeText(NotesActivity.this, "Insert", Toast.LENGTH_SHORT).show();
+
+                    boolean isInserted = myDB.instertData( title, des, date);
+
+                    if(isInserted == true){
+                        Toast.makeText( NotesActivity.this, "Data is inserted", Toast.LENGTH_SHORT ).show();
+                    }
+                    else{
+                        Toast.makeText( NotesActivity.this, "Data is not inserted", Toast.LENGTH_SHORT ).show();
+
+                    }
+                };
+
+
             }
         } );
 
@@ -162,4 +187,41 @@ public class NotesActivity extends AppCompatActivity {
         builder.setMessage( message );
         builder.show();
     }
+
+
+//    public boolean checkAlreadyExist(String email)
+//    {
+//        String query = SELECT + YOUR_EMAIL_COLUMN + FROM + TABLE_NAME + WHERE + YOUR_EMAIL_COLUMN + " =?";
+//        Cursor cursor = db.rawQuery(query, new String[]{email});
+//        if (cursor.getCount() > 0)
+//        {
+//            return false;
+//        }
+//        else
+//            return true;
+//    }
+//    public boolean checkIfRecordExist(String TABLE_NAME,String COL_2,String chek)
+//    {
+//        try
+//        {
+//            SQLiteDatabase db=this.getReadableDatabase();
+//            Cursor cursor=db.rawQuery("SELECT "+COL_2+" FROM "+TABLE_NAME+" WHERE "+COL_2+"='"+COL_2+"'",null);
+//            if (cursor.moveToFirst())
+//            {
+//                db.close();
+//                Log.d("Record  Already Exists", "Table is:"+TABLE_NAME+" ColumnName:"+COL_2);
+//                return true;//record Exists
+//
+//            }
+//            Log.d("New Record  ", "Table is:"+TABLE_NAME+" ColumnName:"+COL_2+" Column Value:"+COL_2);
+//            db.close();
+//        }
+//        catch(Exception errorException)
+//        {
+//            Log.d("Exception occured", "Exception occured "+errorException);
+//            // db.close();
+//        }
+//        return false;
+//    }
+
 }
