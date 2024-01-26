@@ -15,8 +15,10 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_1 = "ID";
     public static final String COL_2 = "Total_Money";
     public static final String COL_3 = "Total_Hours";
+    public static final String COL_5 = "Win";
+    public static final String COL_6 = "Loss";
+
     public static final String COL_4 = "Date";
-    public static final String COL_5 = "Date";
     public static final String LBR = "(";
     public static final String RBR = ")";
     public static final String COM = ",";
@@ -33,7 +35,7 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
         //Creating table
 
         db.execSQL( "create table " + TABLE_NAME + LBR + COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT" + COM +
-                COL_2 + " REAL" + COM + COL_3 + " REAL" + COM + COL_4 + " INTEGER" +RBR );
+                COL_2 + " REAL" + COM + COL_3 + " REAL"+ COM + COL_5 + " REAL"+ COM + COL_6 + " REAL" + COM + COL_4 + " INTEGER" +RBR );
 
         // Another way of writing the CREATE TABLE query
        /* db.execSQL( "create table student_data (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Surname TEXT," +
@@ -51,7 +53,7 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Insert data in database
-    public boolean instertData(String name, String surname, String date){
+    public boolean instertData(Double name, Double surname, String date,int win,int loss){
 
         //Get the instance of SQL Database which we have created
         SQLiteDatabase db = getWritableDatabase();
@@ -61,6 +63,9 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put( COL_2, name );
         contentValues.put( COL_3, surname );
         contentValues.put( COL_4, date );
+
+        contentValues.put( COL_5, win );
+        contentValues.put( COL_6, loss );
 
         long result = db.insert( TABLE_NAME, null, contentValues );
 
@@ -80,19 +85,19 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Update fields of database using ID (Unique identifier)
-    public boolean updateData(String first_name, String last_name, String date){
+    public boolean updateData(Double first_name, Double last_name, String date,int win,int loss){
 
         SQLiteDatabase db = getWritableDatabase();
-
         ContentValues contentValues = new ContentValues(  );
         // When you want to update only name field
 
-
-
-        if(!first_name.isEmpty() && !last_name.isEmpty() && !date.isEmpty()){
+        if(!date.isEmpty()){
             contentValues.put( COL_2, first_name );
             contentValues.put( COL_3, last_name );
             contentValues.put( COL_4, date );
+
+            contentValues.put( COL_5, win );
+            contentValues.put( COL_6, loss );
         }
 
         // UPDATE query
@@ -100,7 +105,7 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    //Delete data from the databse using ID (Primary Key)
+    //Delete data from the database using ID (Primary Key)
     public Integer deleteData(String id){
 
         SQLiteDatabase db = getWritableDatabase();
@@ -118,23 +123,115 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public String getNoteTitle(String activeuser){
+    public String getTotalMoney(String activeuser){
         String rv = "Note";
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select First_Nmae from friends_data where Date=?",new String[]{activeuser});
+        Cursor cursor=db.rawQuery("select Total_Money from trade where Date=?",new String[]{activeuser});
         if (cursor.moveToFirst()) {
-            rv = cursor.getString(cursor.getColumnIndex("First_Nmae"));
+            rv = cursor.getString(cursor.getColumnIndex("Total_Money"));
         }
         return rv;
     }
 
-    public String getNoteDes(String activeuser){
+    public String geTotalHours(String activeuser){
         String rv = "Note";
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select First_Nmae from friends_data where Date=?",new String[]{activeuser});
+        Cursor cursor=db.rawQuery("select Total_Hours from trade where Date=?",new String[]{activeuser});
         if (cursor.moveToFirst()) {
-            rv = cursor.getString(cursor.getColumnIndex("Last_Name"));
+            rv = cursor.getString(cursor.getColumnIndex("Total_Hours"));
         }
         return rv;
+    }
+
+    public float CurrentMonthyHours(){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Total_Hours) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+
+    public float CurrentMonthyMoney(){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Total_Money) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+
+    public float CurrentYearlyMoney(){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Total_Money) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now'))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+
+    public float CurrentYearlyHours(){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Total_Hours) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now'))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+    public float CurrentMonthlyWin(){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Win) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+
+
+    public float CurrentMonthlyLoss(){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Loss) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+    }
+
+    public float getWeeklyMoneyMade(){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+
+
+        //SELECT strftime('%Y-%W', date_time ) as date_time, sum(app_data) FROM "+TABLE_APPDATA+ " GROUP BY strftime('%Y-%W', date_time ) ORDER BY app_data desc;
+        String getamountdata = "SELECT SUM(Loss) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
     }
 }
