@@ -124,7 +124,7 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String getTotalMoney(String activeuser){
-        String rv = "Note";
+        String rv = "0.00";
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select Total_Money from trade where Date=?",new String[]{activeuser});
         if (cursor.moveToFirst()) {
@@ -134,7 +134,7 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String geTotalHours(String activeuser){
-        String rv = "Note";
+        String rv = "0.00";
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select Total_Hours from trade where Date=?",new String[]{activeuser});
         if (cursor.moveToFirst()) {
@@ -143,11 +143,11 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
         return rv;
     }
 
-    public float CurrentMonthyHours(){
+    public float CurrentMonthyHours(String thisDate){
         float x = 0;
         SQLiteDatabase db = getReadableDatabase();
         //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
-        String getamountdata = "SELECT SUM(Total_Hours) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        String getamountdata = "SELECT SUM(Total_Hours) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))" +"AND  strftime('%m',Date) = "+"strftime('%m',date("+thisDate+"))";
         Cursor c = db.rawQuery(getamountdata, null);
         if(c.moveToFirst()){
             x = c.getFloat(0);
@@ -156,11 +156,11 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public float CurrentMonthyMoney(){
+    public float CurrentMonthyMoney(String thisDate){
         float x = 0;
         SQLiteDatabase db = getReadableDatabase();
         //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
-        String getamountdata = "SELECT SUM(Total_Money) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        String getamountdata = "SELECT SUM(Total_Money) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))" +"AND  strftime('%m',Date) = "+"strftime('%m',date("+thisDate+"))";
         Cursor c = db.rawQuery(getamountdata, null);
         if(c.moveToFirst()){
             x = c.getFloat(0);
@@ -169,11 +169,11 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public float CurrentYearlyMoney(){
+    public float CurrentYearlyMoney(String thisDate){
         float x = 0;
         SQLiteDatabase db = getReadableDatabase();
         //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
-        String getamountdata = "SELECT SUM(Total_Money) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now'))";
+        String getamountdata = "SELECT SUM(Total_Money) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))";
         Cursor c = db.rawQuery(getamountdata, null);
         if(c.moveToFirst()){
             x = c.getFloat(0);
@@ -182,11 +182,11 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public float CurrentYearlyHours(){
+    public float CurrentYearlyHours(String thisDate){
         float x = 0;
         SQLiteDatabase db = getReadableDatabase();
         //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
-        String getamountdata = "SELECT SUM(Total_Hours) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now'))";
+        String getamountdata = "SELECT SUM(Total_Hours) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))";
         Cursor c = db.rawQuery(getamountdata, null);
         if(c.moveToFirst()){
             x = c.getFloat(0);
@@ -194,11 +194,11 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
         return x;
 
     }
-    public float CurrentMonthlyWin(){
+    public float CurrentMonthlyWin(String thisDate){
         float x = 0;
         SQLiteDatabase db = getReadableDatabase();
         //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
-        String getamountdata = "SELECT SUM(Win) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        String getamountdata = "SELECT SUM(Win) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))" +"AND  strftime('%m',Date) = "+"strftime('%m',date("+thisDate+"))";
         Cursor c = db.rawQuery(getamountdata, null);
         if(c.moveToFirst()){
             x = c.getFloat(0);
@@ -208,11 +208,11 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public float CurrentMonthlyLoss(){
+    public float CurrentMonthlyLoss(String thisDate){
         float x = 0;
         SQLiteDatabase db = getReadableDatabase();
         //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
-        String getamountdata = "SELECT SUM(Loss) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        String getamountdata = "SELECT SUM(Loss) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))" +"AND  strftime('%m',Date) = "+"strftime('%m',date("+thisDate+"))";
         Cursor c = db.rawQuery(getamountdata, null);
         if(c.moveToFirst()){
             x = c.getFloat(0);
@@ -220,18 +220,74 @@ public class TradeDatabaseHelper extends SQLiteOpenHelper {
         return x;
     }
 
-    public float getWeeklyMoneyMade(){
+
+    public float getWeeklyMoneyMade(String thisDate){
         float x = 0;
         SQLiteDatabase db = getReadableDatabase();
         //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
-
-
-        //SELECT strftime('%Y-%W', date_time ) as date_time, sum(app_data) FROM "+TABLE_APPDATA+ " GROUP BY strftime('%Y-%W', date_time ) ORDER BY app_data desc;
-        String getamountdata = "SELECT SUM(Loss) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = strftime('%Y',date('now')) AND  strftime('%m',Date) = strftime('%m',date('now'))";
+        String getamountdata = "SELECT SUM(Total_Money) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))" +"AND  strftime('%W',Date) = "+"strftime('%W',date("+thisDate+"))";
         Cursor c = db.rawQuery(getamountdata, null);
         if(c.moveToFirst()){
             x = c.getFloat(0);
         }
         return x;
+
+    }
+
+    public float CurrentWeeklyHours(String thisDate){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Total_Hours) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))" +"AND  strftime('%W',Date) = "+"strftime('%W',date("+thisDate+"))";
+        Cursor c = db.rawQuery(getamountdata, null);
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+
+
+
+
+    public float CurrentYearlyWins(String thisDate){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Win) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))";
+        Cursor c = db.rawQuery(getamountdata, null);
+
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+    public float CurrentYearlyLoss(String thisDate){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Loss) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))";
+        Cursor c = db.rawQuery(getamountdata, null);
+
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
+    }
+
+    public float CurrentYearlyWinWithFilter(String thisDate){
+        float x = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        //        String getamountdata = "SELECT SUM(inc_amount) AS totalInc FROM "+ TABLE_ENTRY + " WHERE strftime('%Y',entry_date) = strftime('%Y',date('now')) AND  strftime('%m',entry_date) = strftime('%m',date('now'))"";
+        String getamountdata = "SELECT SUM(Win) AS totalInc FROM  trade  WHERE strftime('%Y',Date) = "+"strftime('%Y',date("+thisDate+"))";
+        Cursor c = db.rawQuery(getamountdata, null);
+
+        if(c.moveToFirst()){
+            x = c.getFloat(0);
+        }
+        return x;
+
     }
 }

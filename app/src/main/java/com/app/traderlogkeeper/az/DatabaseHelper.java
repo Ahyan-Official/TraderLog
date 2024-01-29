@@ -110,8 +110,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean checkDate(String user) {
         SQLiteDatabase db = this.getReadableDatabase();
+
         String queryString = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_4 + " = ?";
         Cursor c = db.rawQuery(queryString, new String[]{user});
+
         Log.e("kkoko", "checkDate: "+ c.getColumnName(1).toString());
         boolean result = c.getCount() > 0;
         c.close();
@@ -121,20 +123,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getNoteTitle(String activeuser){
         String rv = "Note";
+
         SQLiteDatabase db=this.getReadableDatabase();
+
         Cursor cursor=db.rawQuery("select First_Nmae from friends_data where Date=?",new String[]{activeuser});
         if (cursor.moveToFirst()) {
-            rv = cursor.getString(cursor.getColumnIndex("First_Nmae"));
+            rv = cursor.getString(0);
         }
         return rv;
     }
 
     public String getNoteDes(String activeuser){
-        String rv = "Note";
+        String rv = "Description";
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("select First_Nmae from friends_data where Date=?",new String[]{activeuser});
+        Cursor cursor=db.rawQuery("select Last_Name from friends_data where Date=?",new String[]{activeuser});
         if (cursor.moveToFirst()) {
-            rv = cursor.getString(cursor.getColumnIndex("Last_Name"));
+            rv = cursor.getString(0);
         }
         return rv;
     }

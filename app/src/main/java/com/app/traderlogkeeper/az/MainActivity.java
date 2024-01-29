@@ -23,9 +23,11 @@ public class MainActivity extends AppCompatActivity {
 
     Button saveTodayBtn,notesBtn;
     EditText etMoneyMade,etHoursWorked,etMinutesWorked;
-    TextView etMonthlyMoney,etMonthlyHours,TotalWin,TotalLoss,winLossRatio;
+    TextView etMonthlyMoney,etMonthlyHours,TotalWin,TotalLoss,winLossRatio,TotalWeeklyMoney,TotalWeeklyHours
+            ,yearTotal,yearlyWinPercentage,yearAverage;
     TradeDatabaseHelper myDB;
     CalendarView calendarView;
+    String dateSearchAndAdd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
         //logger day keeper app
 
         myDB = new TradeDatabaseHelper( this );
+        yearAverage = findViewById(R.id.yearAverage);
+
+        TotalWeeklyMoney = findViewById(R.id.TotalWeeklyMoney);
+        TotalWeeklyHours = findViewById(R.id.TotalWeeklyHours);
+        yearTotal = findViewById(R.id.yearTotal);
+        yearlyWinPercentage = findViewById(R.id.yearlyWinPercentage);
+
+        TotalWin = findViewById(R.id.TotalWin);
+
 
         TotalWin = findViewById(R.id.TotalWin);
         TotalLoss = findViewById(R.id.TotalLoss);
@@ -55,13 +66,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String date = df.format(new Date());
-        Log.e("ooo", "onCreate: "+ myDB.CurrentMonthyHours());
+        dateSearchAndAdd = df.format(new Date());
+        Log.e("ooo", "onCreate: "+ myDB.getTotalMoney(dateSearchAndAdd));
 
-        etMoneyMade.setText(myDB.getTotalMoney(date));
-        etHoursWorked.setText(myDB.geTotalHours(date));;
+        if((!myDB.getTotalMoney(dateSearchAndAdd).equalsIgnoreCase("note"))){
 
-        updateValues();
+            etMoneyMade.setText(myDB.getTotalMoney(dateSearchAndAdd));
+            etHoursWorked.setText(myDB.geTotalHours(dateSearchAndAdd));;
+
+        }
+
+        updateValues(dateSearchAndAdd);
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -72,12 +87,16 @@ public class MainActivity extends AppCompatActivity {
 
                 String mm = addZerodata(m);
                 String day = addZerodata(dayOfMonth);
-                String date = year+"-"+mm+"-"+day;
+                dateSearchAndAdd = year+"-"+mm+"-"+day;
 
                 Toast.makeText(getApplicationContext(),year+"-"+mm+"-"+day , Toast.LENGTH_SHORT).show();// TODO Auto-generated method stub
 
-                etMoneyMade.setText(myDB.getTotalMoney(date));
-                etHoursWorked.setText(myDB.geTotalHours(date));;
+                if((!myDB.getTotalMoney(dateSearchAndAdd).isEmpty())){
+                    etMoneyMade.setText(myDB.getTotalMoney(dateSearchAndAdd));
+                    etHoursWorked.setText(myDB.geTotalHours(dateSearchAndAdd));;
+
+                }
+                updateValues(dateSearchAndAdd);
 
             }
         });
@@ -100,66 +119,67 @@ public class MainActivity extends AppCompatActivity {
                     double totalHours = hours+hoursfromminutes;
 
                     //Current Date
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    String date = df.format(new Date());
+//                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    String date = df.format(new Date());
 
 
-                    if(myDB.checkDate(date)){
-                        Toast.makeText(MainActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                    if(myDB.checkDate(dateSearchAndAdd)){
+                        Toast.makeText(MainActivity.this, "Saved", Toast.LENGTH_SHORT).show();
                         //update
 
                         if(money<0){
-                            boolean isUpdated = myDB.updateData( money, totalHours, date,0,1 );
+                            boolean isUpdated = myDB.updateData( money, totalHours, dateSearchAndAdd,0,1 );
 
                             if (isUpdated == true){
-                                showMessage( "Update", "Your data has been successfully updated!" );
+                             //   showMessage( "Update", "Your data has been successfully updated!" );
                             }
                             else{
-                                showMessage( "Update failed", "Cannot Update your data :(" );
+                                //showMessage( "Update failed", "Cannot Update your data :(" );
 
                             }
                         }else{
-                            boolean isUpdated = myDB.updateData( money, totalHours, date,1,0 );
+                            boolean isUpdated = myDB.updateData( money, totalHours, dateSearchAndAdd,1,0 );
 
                             if (isUpdated == true){
-                                showMessage( "Update", "Your data has been successfully updated!" );
+                              //  showMessage( "Update", "Your data has been successfully updated!" );
                             }
                             else{
-                                showMessage( "Update failed", "Cannot Update your data :(" );
+                              //  showMessage( "Update failed", "Cannot Update your data :(" );
 
                             }
                         }
 
                     }else{
                         //insert
-                        Toast.makeText(MainActivity.this, "Insert", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Saved", Toast.LENGTH_SHORT).show();
 
                         if(money<0){
 
-                            boolean isInserted = myDB.instertData( money, totalHours, date,0,1);
+                            boolean isInserted = myDB.instertData( money, totalHours, dateSearchAndAdd,0,1);
 
                             if(isInserted == true){
-                                Toast.makeText( MainActivity.this, "Data is inserted", Toast.LENGTH_SHORT ).show();
+                             //   Toast.makeText( MainActivity.this, "Data is inserted", Toast.LENGTH_SHORT ).show();
                             }
                             else{
-                                Toast.makeText( MainActivity.this, "Data is not inserted", Toast.LENGTH_SHORT ).show();
+                               // Toast.makeText( MainActivity.this, "Data is not inserted", Toast.LENGTH_SHORT ).show();
 
                             }
                         }else{
-                            boolean isInserted = myDB.instertData( money, totalHours, date,1,0);
+                            boolean isInserted = myDB.instertData( money, totalHours, dateSearchAndAdd,1,0);
 
                             if(isInserted == true){
-                                Toast.makeText( MainActivity.this, "Data is inserted", Toast.LENGTH_SHORT ).show();
+                              //  Toast.makeText( MainActivity.this, "Data is inserted", Toast.LENGTH_SHORT ).show();
                             }
                             else{
-                                Toast.makeText( MainActivity.this, "Data is not inserted", Toast.LENGTH_SHORT ).show();
+                               // Toast.makeText( MainActivity.this, "Data is not inserted", Toast.LENGTH_SHORT ).show();
 
                             }
                         }
 
                     };
 
-                    updateValues();
+                    updateValues( dateSearchAndAdd);
+
 
                 }
 
@@ -195,47 +215,120 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void updateValues(){
+    public void updateValues(String dateSearchAndAdd){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String date = df.format(new Date());
-        Log.e("ooo", "onCreate: "+ myDB.CurrentMonthyHours());
+       // String date = df.format(new Date());
+        //Log.e("ooo1   ", "onCreate: "+ myDB.getTotalMoney("'"+dateSearchAndAdd+"'"));
 
         //Today Hours and Days
-        etMoneyMade.setText(myDB.getTotalMoney(date));
-        etHoursWorked.setText(myDB.geTotalHours(date));;
+        //float TotalLossesInYear = myDB.CurrentYearlyWinWithFilter("'"+dateSearchAndAdd+"'");
+        //Log.e("llo", "updateValues: "+myDB.CurrentWeeklyHours("'"+dateSearchAndAdd+"'") );
 
+        if(myDB.getTotalMoney(dateSearchAndAdd).isEmpty()){
+            etMoneyMade.setText("");
+            etHoursWorked.setText("");
+            etMinutesWorked.setText("");
 
-        //Monthly
-        etMonthlyMoney.setText(String.valueOf(myDB.CurrentMonthyMoney()));;
-        etMonthlyHours.setText(String.valueOf(myDB.CurrentMonthyHours()));;
-
-        DecimalFormat d = new DecimalFormat();
-        d.setMaximumFractionDigits(2);
-        String hoursInTwoDecimal =String.valueOf(d.format(Float.parseFloat(myDB.geTotalHours(date))));
-
-
-        String s_input = hoursInTwoDecimal;
-        if (s_input.contains(".")) {
-            String[] split = s_input.split("\\.");
-            String whole = split[0];
-            etHoursWorked.setText(whole);
-            Toast.makeText(this, ""+whole, Toast.LENGTH_SHORT).show();
-
-            String fractional = split[1];
         }
+            etMoneyMade.setText(myDB.getTotalMoney(dateSearchAndAdd));
+            etHoursWorked.setText(myDB.geTotalHours(dateSearchAndAdd));;
+
+            //Monthly
+
+            etMonthlyMoney.setText(String.valueOf(myDB.CurrentMonthyMoney("'"+dateSearchAndAdd+"'")));;
+            etMonthlyHours.setText(String.valueOf(myDB.CurrentMonthyHours("'"+dateSearchAndAdd+"'")));;
+
+            DecimalFormat d = new DecimalFormat();
+            d.setMaximumFractionDigits(2);
+            String hoursInTwoDecimal =String.valueOf(d.format(Float.parseFloat(myDB.geTotalHours(dateSearchAndAdd))));
+            Log.e("vvvvvvv", "updateValues: "+ hoursInTwoDecimal);
+
+            String s_input = hoursInTwoDecimal;
+            if (s_input.contains(".")) {
+                String[] split = s_input.split("\\.");
+                String whole = split[0];
+                etHoursWorked.setText(whole);
+             //   Toast.makeText(this, ""+whole, Toast.LENGTH_SHORT).show();
+
+                String fractional = split[1];
+
+                String minutesinDecimal = hoursInTwoDecimal.substring(hoursInTwoDecimal.indexOf("."));//0
+                double totalMinutes = Double.parseDouble(minutesinDecimal)*60;
+
+                etMinutesWorked.setText(String.valueOf(totalMinutes));
+            }else{
+                etMinutesWorked.setText(String.valueOf(0));
+
+            }
 
 
-        String minutesinDecimal = hoursInTwoDecimal.substring(hoursInTwoDecimal.indexOf("."));
-        double totalMinutes = Double.parseDouble(minutesinDecimal)*60;
 
-        etMinutesWorked.setText(String.valueOf(totalMinutes));
-        //Get Win Loss
-        TotalWin.setText(String.valueOf(myDB.CurrentMonthlyWin()));
-        TotalLoss.setText(String.valueOf(myDB.CurrentMonthlyLoss()));
+            //Get Win Loss
+            TotalWin.setText(String.valueOf(myDB.CurrentMonthlyWin("'"+dateSearchAndAdd+"'")));
+            TotalLoss.setText(String.valueOf(myDB.CurrentMonthlyLoss("'"+dateSearchAndAdd+"'")));
 
-        float ratio = myDB.CurrentMonthlyWin()/myDB.CurrentMonthlyLoss();
+            float ratio = myDB.CurrentMonthlyWin("'"+dateSearchAndAdd+"'")/myDB.CurrentMonthlyLoss("'"+dateSearchAndAdd+"'");
 
-        winLossRatio.setText(String.valueOf(ratio));
+            winLossRatio.setText(String.valueOf(myDB.CurrentMonthlyWin("'"+dateSearchAndAdd+"'"))+"/"+String.valueOf(myDB.CurrentMonthlyLoss("'"+dateSearchAndAdd+"'")));
+
+            //weekly Done
+            TotalWeeklyMoney.setText(String.valueOf(myDB.getWeeklyMoneyMade("'"+dateSearchAndAdd+"'")));
+            TotalWeeklyHours.setText(String.valueOf(myDB.CurrentWeeklyHours("'"+dateSearchAndAdd+"'")));
+
+
+
+            //Year Total Done
+
+            String s_inputYearHours = String.valueOf(myDB.CurrentYearlyHours("'"+dateSearchAndAdd+"'"));
+            if (s_inputYearHours.contains(".")) {
+                String[] split = s_inputYearHours.split("\\.");
+
+                String yearHoursTotal = split[0];
+
+
+
+                String fractional = split[1].substring(0,1);
+                yearHoursTotal  =yearHoursTotal+"."+fractional;
+
+                yearTotal.setText(String.valueOf(myDB.CurrentYearlyMoney("'"+dateSearchAndAdd+"'")+"/"+yearHoursTotal+" Hr"));
+
+            }else{
+                yearTotal.setText(String.valueOf(myDB.CurrentYearlyMoney("'"+dateSearchAndAdd+"'")+"/"+myDB.CurrentYearlyHours("'"+dateSearchAndAdd+"'")+" Hr"));
+
+            }
+
+            float TotalWinInYear = myDB.CurrentYearlyWins("'"+dateSearchAndAdd+"'");
+            //float TotalLossesInYear = myDB.CurrentYearlyWinWithFilter("'"+dateSearchAndAdd+"'");
+            float TotalTradesDoneInYear = myDB.CurrentYearlyWins("'"+dateSearchAndAdd+"'")+myDB.CurrentYearlyLoss("'"+dateSearchAndAdd+"'");
+            double percentageWin = (TotalWinInYear/TotalTradesDoneInYear)*100;
+            //double percentageWinIN100 = percentageWin*100;
+
+            //YearAverage 2 decimal
+        double yearAvg = myDB.CurrentYearlyMoney("'"+dateSearchAndAdd+"'")/myDB.CurrentYearlyHours("'"+dateSearchAndAdd+"'");
+
+        String avgStr = String.valueOf(yearAvg);
+            if (avgStr.contains(".")) {
+                String[] split = avgStr.split("\\.");
+
+                String yearavg = split[0];
+
+
+
+                String fractional = split[1].substring(0,1);
+                yearavg  =yearavg+"."+fractional;
+
+                yearAverage.setText("$"+yearavg+ "/Hr");
+
+            }else{
+                yearAverage.setText("$"+avgStr+ "/Hr");
+
+            }
+
+
+            yearlyWinPercentage.setText(String.valueOf(percentageWin)+"%");
+
+
+
 
     }
 }

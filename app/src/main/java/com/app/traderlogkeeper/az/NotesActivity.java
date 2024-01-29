@@ -3,6 +3,7 @@ package com.app.traderlogkeeper.az;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,22 +34,14 @@ public class NotesActivity extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String date = df.format(new Date());
         etTitle.setText(myDB.getNoteTitle(date));;
-
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        etDes.setText(myDB.getNoteDes(date));;
 
 
-
-
-
-            }
-        });
 
 
         viewData();
         //updateData();
-        deleteData();
+       // deleteData();
 
 
         saveBtn.setOnClickListener( new View.OnClickListener() {
@@ -64,30 +57,36 @@ public class NotesActivity extends AppCompatActivity {
 
 
                 if(myDB.checkDate(date)){
-                    Toast.makeText(NotesActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(NotesActivity.this, "Update", Toast.LENGTH_SHORT).show();
                     //update
                     boolean isUpdated = myDB.updateData( title, des, date );
+                    Toast.makeText( NotesActivity.this, "Saved", Toast.LENGTH_SHORT ).show();
 
                     if (isUpdated == true){
-                        showMessage( "Update", "Your data has been successfully updated!" );
+                       // showMessage( "Update", "Note has been successfully updated!" );
                     }
                     else{
-                        showMessage( "Update failed", "Cannot Update your data :(" );
+                       // showMessage( "Update failed", "Cannot Update your data :(" );
 
                     }
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    finish();
+
                 }else{
                     //insert
-                    Toast.makeText(NotesActivity.this, "Insert", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(NotesActivity.this, "Insert", Toast.LENGTH_SHORT).show();
 
                     boolean isInserted = myDB.instertData( title, des, date);
 
                     if(isInserted == true){
-                        Toast.makeText( NotesActivity.this, "Data is inserted", Toast.LENGTH_SHORT ).show();
+                        Toast.makeText( NotesActivity.this, "Note is inserted", Toast.LENGTH_SHORT ).show();
                     }
                     else{
-                        Toast.makeText( NotesActivity.this, "Data is not inserted", Toast.LENGTH_SHORT ).show();
+                        Toast.makeText( NotesActivity.this, "Note is not inserted", Toast.LENGTH_SHORT ).show();
 
                     }
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    finish();
                 };
 
 
@@ -131,52 +130,8 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     //For updating existing data in database
-    public void updateData(){
-
-        saveBtn.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String title = etTitle.getText().toString();
-                String des = etDes.getText().toString();
-
-                //Current Date
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                String date = df.format(new Date());
-                //Current Date and Time
-
-
-                boolean isUpdated = myDB.updateData( title, des, date );
-
-                if (isUpdated == true){
-                    showMessage( "Update", "Your data has been successfully updated!" );
-                }
-                else
-                    showMessage( "Update failed", "Cannot Update your data :(" );
-            }
-        } );
-    }
 
     //For deleting data in the database
-    public void deleteData(){
-
-//        deleteData.setOnClickListener( new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                id = edit_id.getText().toString();
-//
-//                Integer res = myDB.deleteData( id );
-//                if(res > 0){
-//                    Toast.makeText( getApplicationContext(), "Row effected", Toast.LENGTH_SHORT ).show();
-//                }
-//                else{
-//                    Toast.makeText( getApplicationContext(), "Row not effected", Toast.LENGTH_SHORT ).show();
-//                }
-//
-//            }
-//        } );
-    }
 
     //Method for creating AlertDialog box
     private void showMessage(String title, String message) {
